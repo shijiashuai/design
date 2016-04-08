@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 
 # Scrapy settings for amazon_crawler project
 #
@@ -13,7 +14,6 @@ BOT_NAME = 'amazon_crawler'
 
 SPIDER_MODULES = ['amazon_crawler.spiders']
 NEWSPIDER_MODULE = 'amazon_crawler.spiders'
-
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'amazon_crawler (+http://www.yourdomain.com)'
@@ -62,8 +62,8 @@ NEWSPIDER_MODULE = 'amazon_crawler.spiders'
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-#    'amazon_crawler.pipelines.SomePipeline': 300,
-    'scrapyelasticsearch.scrapyelasticsearch.ElasticSearchPipeline'
+    #    'amazon_crawler.pipelines.SomePipeline': 300,
+    'scrapyelasticsearch.scrapyelasticsearch.ElasticSearchPipeline': 300
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -85,12 +85,12 @@ ITEM_PIPELINES = {
 # HTTPCACHE_IGNORE_HTTP_CODES=[]
 # HTTPCACHE_STORAGE='scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-from scrapy import log
-ELASTICSEARCH_SERVER = 'localhost' # If not 'localhost' prepend 'http://'
-ELASTICSEARCH_PORT = 9200 # If port 80 leave blank
+
+ELASTICSEARCH_SERVER = 'localhost'  # If not 'localhost' prepend 'http://'
+ELASTICSEARCH_PORT = 9200  # If port 80 leave blank
 ELASTICSEARCH_USERNAME = ''
 ELASTICSEARCH_PASSWORD = ''
 ELASTICSEARCH_INDEX = 'scrapy'
 ELASTICSEARCH_TYPE = 'books'
 ELASTICSEARCH_UNIQ_KEY = 'url'  # Custom uniqe key like 'student_id'
-ELASTICSEARCH_LOG_LEVEL= log.DEBUG
+ELASTICSEARCH_LOG_LEVEL = logging.DEBUG
