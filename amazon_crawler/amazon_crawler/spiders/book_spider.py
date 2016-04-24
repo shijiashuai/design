@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import logging
+
 import scrapy
 
 from amazon_crawler.items import Book, Review, BookLoader, ReviewLoader
@@ -16,7 +18,7 @@ class BookSpiderSpider(scrapy.Spider):
         'book_url': '//div[@id="mainResults" or @id="atfResults"]//div[@class="a-row a-spacing-small"]//a/@href',
         'book_list_page_next_link': '//a[@id="pagnNextLink"]/@href',
         'book_title': '//span[@id="btAsinTitle"]/span/text()|//span[@id="productTitle"]/text()',
-        'review_link': '//a[@id="seeAllReviewsUrl"]/@href',
+        'review_link': '//a[@id="seeAllReviewsUrl"]/@href|//a[@id="acrCustomerReviewText"]',
         'review_divs': '//div[@id="cm_cr-review_list"]//div[@class="a-section review"]',
         'review_next_page_link': '//div[@id="cm_cr-pagination_bar"]//li[@class="a-last"]/a/@href'
     }
@@ -34,9 +36,11 @@ class BookSpiderSpider(scrapy.Spider):
             book_urls = response.xpath(self.paths['book_url']).extract()
             for book_url in book_urls:
                 yield scrapy.Request(book_url, callback=self.parse_books)
-                next_link = response.xpath(self.paths['book_list_page_next_link']).extract()
-                if next_link:
-                    yield scrapy.Request(response.urljoin(next_link[0]), callback=self.parse)
+                break
+            # next_link = response.xpath(self.paths['book_list_page_next_link']).extract()
+            # if next_link:
+            #     logging.info(response.urljoin(next_link[0]))
+            #     yield scrapy.Request(response.urljoin(next_link[0]), callback=self.parse)
 
     def parse_books(self, response):
         book_loader = BookLoader(item=Book(), response=response)
@@ -44,11 +48,11 @@ class BookSpiderSpider(scrapy.Spider):
         book_loader.add_xpath('title', self.paths['book_title'])
         book_loader.add_value('url', response.url)
         review_link = response.xpath(self.paths['review_link']).extract()
-        # from scrapy.shell import inspect_response
-        # inspect_response(response, self)
+        # if review_link:
+        #     yield scrapy.Request(review_link[0], callback=self.parse_comments,
+        #                          meta={'book_loader': book_loader, 'reviews': []})
+        # else:
         yield book_loader.load_item()
-        for url in review_link:
-            yield scrapy.Request(url, callback=self.parse_comments, meta={'book_loader': book_loader, 'reviews': []})
 
     def parse_comments(self, response):
         review_divs = response.xpath(self.paths['review_divs'])
@@ -60,9 +64,8 @@ class BookSpiderSpider(scrapy.Spider):
             review_loader.add_css('content', '.review-text')
             review_loader.add_css('date', '.review-date')
             reviews.append(dict(review_loader.load_item()))
-
         next_page_link = response.xpath(self.paths['review_next_page_link']).extract()
-        if next_page_link and len(reviews) < 20:
+        if next_page_link:
             yield scrapy.Request(response.urljoin(next_page_link[0]), callback=self.parse_comments,
                                  meta={'reviews': reviews, 'book_loader': response.meta['book_loader']})
         else:

@@ -63,7 +63,7 @@ NEWSPIDER_MODULE = 'amazon_crawler.spiders'
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     #    'amazon_crawler.pipelines.SomePipeline': 300,
-    'scrapyelasticsearch.scrapyelasticsearch.ElasticSearchPipeline': 300
+    'amazon_crawler.pipelines.ElasticSearchPipeline': 300
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -79,18 +79,17 @@ ITEM_PIPELINES = {
 
 # Enable and configure HTTP caching (disabled by default)
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-# HTTPCACHE_ENABLED=True
-# HTTPCACHE_EXPIRATION_SECS=0
-# HTTPCACHE_DIR='httpcache'
-# HTTPCACHE_IGNORE_HTTP_CODES=[]
-# HTTPCACHE_STORAGE='scrapy.extensions.httpcache.FilesystemCacheStorage'
-
+# HTTPCACHE_ENABLED = True
+# HTTPCACHE_EXPIRATION_SECS = 0
+# HTTPCACHE_DIR = 'httpcache'
+# HTTPCACHE_IGNORE_HTTP_CODES = []
+# HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 ELASTICSEARCH_SERVER = 'localhost'  # If not 'localhost' prepend 'http://'
 ELASTICSEARCH_PORT = 9200  # If port 80 leave blank
 ELASTICSEARCH_USERNAME = ''
 ELASTICSEARCH_PASSWORD = ''
-ELASTICSEARCH_INDEX = 'scrapy'
+ELASTICSEARCH_INDEX = 'scrapy-v3'
 ELASTICSEARCH_TYPE = 'books'
 ELASTICSEARCH_UNIQ_KEY = 'url'  # Custom uniqe key like 'student_id'
 ELASTICSEARCH_LOG_LEVEL = logging.DEBUG
