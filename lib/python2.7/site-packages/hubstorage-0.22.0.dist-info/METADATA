@@ -1,0 +1,19 @@
+Metadata-Version: 2.0
+Name: hubstorage
+Version: 0.22.0
+Summary: Client interface for Scrapinghub HubStorage
+Home-page: http://scrapinghub.com
+Author: Scrapinghub
+Author-email: info@scrapinghub.com
+License: BSD
+Platform: Any
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Requires-Dist: requests
+Requires-Dist: retrying (>=1.3.3)
+
+UNKNOWN
+
+

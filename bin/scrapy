@@ -1,11 +1,10 @@
 #!/Users/shijiashuai/Code/design/bin/python
-
-# -*- coding: utf-8 -*-
-import re
+# EASY-INSTALL-ENTRY-SCRIPT: 'Scrapy==1.0.5','console_scripts','scrapy'
+__requires__ = 'Scrapy==1.0.5'
 import sys
-
-from scrapy.cmdline import execute
+from pkg_resources import load_entry_point
 
 if __name__ == '__main__':
-    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
-    sys.exit(execute())
+    sys.exit(
+        load_entry_point('Scrapy==1.0.5', 'console_scripts', 'scrapy')()
+    )
